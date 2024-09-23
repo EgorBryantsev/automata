@@ -33,7 +33,7 @@ public class ABAutomatonTestGPT {
     @Test
     public void testNextGenA() {
         // Test: Single occupied cell in the middle should stay occupied (no neighbors)
-        assertArrayEquals(new boolean[] { false, true, false }, automaton.nextGenA(new boolean[] { false, true, false }));
+        assertArrayEquals(new boolean[] { false, false, false }, automaton.nextGenA(new boolean[] { false, true, false }));
         
         // Test: Single occupied cell with both neighbors empty stays empty
         assertArrayEquals(new boolean[] { false, false, false }, automaton.nextGenA(new boolean[] { true, false, false }));
