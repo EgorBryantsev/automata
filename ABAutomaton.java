@@ -3,12 +3,12 @@ import java.util.Scanner;
 /**
  * Automatons A and B.
  * 
- * TODO 3: FIll in your names and student IDs:
  * 
+ * 
+ * @author Milan Versteegh
+ * @ID 2136279
  * @author Egor Bryantsev
- * @id ID
- * @author NAME
- * @id ID
+ * @ID 2087782
  */
 class ABAutomaton {
     Scanner scanner = new Scanner(System.in);

@@ -28,7 +28,7 @@ public class UniversalAutomatonTest {
 
     @Test
     public void testNextGen() {
-        // Test rule sequence 01011110 (Rule 94 in Wolfram's numbering)
+        // Test rule sequence 01011110 
         boolean[] ruleSequence = {false, true, false, true, true, true, true, false};
         
         // Test case 1: All cells empty
