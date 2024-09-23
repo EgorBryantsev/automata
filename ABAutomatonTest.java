@@ -8,10 +8,10 @@ import org.junit.Test;
  * 
  * TODO 3: Fill in your names and student IDs
  * 
- * @author NAME
- * @id ID
- * @author NAME
- * @id ID
+ * @author Milan Versteegh
+ * @ID 2136279
+ * @author Egor Bryantsev
+ * @ID 2087782
  */
 public class ABAutomatonTest {
     ABAutomaton automaton = new ABAutomaton();
