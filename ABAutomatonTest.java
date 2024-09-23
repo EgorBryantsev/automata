@@ -16,7 +16,7 @@ import org.junit.Test;
 public class ABAutomatonTest {
     ABAutomaton automaton = new ABAutomaton();
 
-    //Tests the genToString method with various scenarios.
+    //Test genToString
     @Test
     public void testGenToString() {
         // Test with empty array
@@ -40,7 +40,7 @@ public class ABAutomatonTest {
         assertEquals("*", automaton.genToString(gen5));
     }
 
-    //Tests the nextGenA method with various scenarios.
+    //Test nextGenA
     @Test
     public void testNextGenA() {
         // Test with a single occupied cell
@@ -84,7 +84,7 @@ public class ABAutomatonTest {
         assertArrayEquals(expected8, automaton.nextGenA(gen8));
     }
 
-    //Tests the nextGenB method with various scenarios.
+    //Test nextGenB
     @Test
     public void testNextGenB() {
         // Test with a single occupied cell

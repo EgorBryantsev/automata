@@ -92,6 +92,3 @@ class UniversalAutomaton {
         new UniversalAutomaton().run();
     }
 }
-
-
-
