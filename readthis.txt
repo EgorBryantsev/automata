@@ -1,0 +1,434 @@
+Certainly! Let's go through each step of your assignment to help you understand how to implement the required methods and write the corresponding unit tests. I'll provide explanations and guidance to help you complete your assignment successfully.
+
+---
+
+### **Step 5: Implement `genToString` Method**
+
+**Objective:** Convert a boolean array representing a generation into a string where occupied cells are represented by `'*'` and empty cells by `' '`.
+
+**Implementation Guide:**
+
+1. **Method Signature:**
+
+   ```java
+   String genToString(boolean[] gen)
+   ```
+
+2. **Logic:**
+
+   - Initialize a `StringBuilder` to construct the output string efficiently.
+   - Iterate over the `gen` array.
+   - For each cell:
+     - If `true` (occupied), append `'*'` to the `StringBuilder`.
+     - If `false` (empty), append `' '` (space) to the `StringBuilder`.
+   - Convert the `StringBuilder` to a `String` and return it.
+
+**Example Code Snippet:**
+
+```java
+/**
+ * Converts a generation array to a string representation.
+ *
+ * @param gen The boolean array representing the generation.
+ * @return A string where occupied cells are '*', and empty cells are ' '.
+ */
+String genToString(boolean[] gen) {
+    StringBuilder sb = new StringBuilder();
+    for (boolean cell : gen) {
+        sb.append(cell ? '*' : ' ');
+    }
+    return sb.toString();
+}
+```
+
+---
+
+### **Step 6: Write Unit Tests for `genToString`**
+
+**Objective:** Write at least five test cases for the `genToString` method, motivating each with a comment.
+
+**Implementation Guide:**
+
+1. **Test Cases to Consider:**
+
+   - **Empty Generation:** Test with an empty array.
+   - **All Occupied Cells:** An array where all cells are `true`.
+   - **All Empty Cells:** An array where all cells are `false`.
+   - **Mixed Cells:** An array with a mix of `true` and `false` values.
+   - **Single Cell:** Test with a single-cell array (`true` and `false`).
+
+2. **Example Test Cases:**
+
+```java
+@Test
+public void testGenToString() {
+    // Test with all empty cells.
+    boolean[] gen1 = {false, false, false};
+    assertEquals("   ", automaton.genToString(gen1));
+    
+    // Test with all occupied cells.
+    boolean[] gen2 = {true, true, true};
+    assertEquals("***", automaton.genToString(gen2));
+    
+    // Test with mixed cells.
+    boolean[] gen3 = {true, false, true};
+    assertEquals("* *", automaton.genToString(gen3));
+    
+    // Test with a single occupied cell.
+    boolean[] gen4 = {true};
+    assertEquals("*", automaton.genToString(gen4));
+    
+    // Test with a single empty cell.
+    boolean[] gen5 = {false};
+    assertEquals(" ", automaton.genToString(gen5));
+}
+```
+
+---
+
+### **Step 7: Implement `nextGenA` Method**
+
+**Objective:** Compute the next generation for Automaton A based on the current generation.
+
+**Rules for Automaton A:**
+
+- **Occupied Cells:**
+  - Remain occupied if exactly one neighbor is occupied.
+- **Empty Cells:**
+  - Remain empty only if both neighbors are empty.
+
+**Implementation Guide:**
+
+1. **Method Signature:**
+
+   ```java
+   boolean[] nextGenA(boolean[] gen)
+   ```
+
+2. **Logic:**
+
+   - Create a new boolean array `nextGen` of the same length as `gen`.
+   - Iterate over each cell in `gen`.
+   - For each cell:
+     - Determine the state of the left neighbor (considering out-of-bounds as empty).
+     - Determine the state of the right neighbor (considering out-of-bounds as empty).
+     - Apply the rules to determine the state of the cell in `nextGen`.
+
+3. **Edge Cases:**
+
+   - For the first cell (index 0), the left neighbor is considered empty.
+   - For the last cell (index `gen.length - 1`), the right neighbor is considered empty.
+
+**Example Code Snippet:**
+
+```java
+/**
+ * Computes the next generation for Automaton A.
+ *
+ * @param gen The current generation.
+ * @return The next generation.
+ */
+boolean[] nextGenA(boolean[] gen) {
+    int length = gen.length;
+    boolean[] nextGen = new boolean[length];
+    
+    for (int i = 0; i < length; i++) {
+        boolean left = (i > 0) ? gen[i - 1] : false;
+        boolean center = gen[i];
+        boolean right = (i < length - 1) ? gen[i + 1] : false;
+        
+        if (center) {
+            // Occupied cell rules
+            int occupiedNeighbors = (left ? 1 : 0) + (right ? 1 : 0);
+            nextGen[i] = (occupiedNeighbors == 1);
+        } else {
+            // Empty cell rules
+            nextGen[i] = !(left == false && right == false);
+        }
+    }
+    return nextGen;
+}
+```
+
+---
+
+### **Step 8: Write Unit Tests for `nextGenA`**
+
+**Objective:** Write at least eight test cases for the `nextGenA` method, motivating each with a comment.
+
+**Implementation Guide:**
+
+1. **Test Cases to Consider:**
+
+   - **Single Cell Cases:** Occupied and empty.
+   - **Edge Cells:** Ensure that border cells are handled correctly.
+   - **All Occupied Cells:** Verify how the automaton handles maximum occupancy.
+   - **All Empty Cells:** Verify that empty generations remain or change correctly.
+   - **Specific Patterns:** Test known patterns to see if they evolve as expected.
+
+2. **Example Test Cases:**
+
+```java
+@Test
+public void testNextGenA() {
+    // Single occupied cell should become empty due to zero occupied neighbors.
+    boolean[] gen1 = {true};
+    boolean[] expected1 = {false};
+    assertArrayEquals(expected1, automaton.nextGenA(gen1));
+    
+    // Two adjacent occupied cells; both should become occupied (one neighbor each).
+    boolean[] gen2 = {true, true};
+    boolean[] expected2 = {true, true};
+    assertArrayEquals(expected2, automaton.nextGenA(gen2));
+    
+    // All empty cells remain empty.
+    boolean[] gen3 = {false, false, false};
+    boolean[] expected3 = {false, false, false};
+    assertArrayEquals(expected3, automaton.nextGenA(gen3));
+    
+    // Occupied cell with two occupied neighbors becomes empty.
+    boolean[] gen4 = {true, true, true};
+    boolean[] expected4 = {true, false, true};
+    assertArrayEquals(expected4, automaton.nextGenA(gen4));
+    
+    // Edge occupied cell with one occupied neighbor remains occupied.
+    boolean[] gen5 = {true, false, false};
+    boolean[] expected5 = {false, true, false};
+    assertArrayEquals(expected5, automaton.nextGenA(gen5));
+    
+    // Empty cell with one occupied neighbor becomes occupied.
+    boolean[] gen6 = {false, true, false};
+    boolean[] expected6 = {true, true, true};
+    assertArrayEquals(expected6, automaton.nextGenA(gen6));
+    
+    // Empty cell with no occupied neighbors remains empty.
+    boolean[] gen7 = {false, false, false};
+    boolean[] expected7 = {false, false, false};
+    assertArrayEquals(expected7, automaton.nextGenA(gen7));
+    
+    // Complex pattern test.
+    boolean[] gen8 = {true, false, true, false, true};
+    boolean[] expected8 = {false, true, false, true, false};
+    assertArrayEquals(expected8, automaton.nextGenA(gen8));
+}
+```
+
+---
+
+### **Step 9: Implement `nextGenB` Method**
+
+**Objective:** Compute the next generation for Automaton B based on the current generation.
+
+**Rules for Automaton B:**
+
+- **Occupied Cells:**
+  - Remain occupied if the right-hand neighbor is empty.
+- **Empty Cells:**
+  - Become occupied if exactly one neighbor is occupied.
+
+**Implementation Guide:**
+
+1. **Method Signature:**
+
+   ```java
+   boolean[] nextGenB(boolean[] gen)
+   ```
+
+2. **Logic:**
+
+   - Create a new boolean array `nextGen` of the same length as `gen`.
+   - Iterate over each cell in `gen`.
+   - For each cell:
+     - Determine the state of the left neighbor (considering out-of-bounds as empty).
+     - Determine the state of the right neighbor (considering out-of-bounds as empty).
+     - Apply the rules to determine the state of the cell in `nextGen`.
+
+3. **Edge Cases:**
+
+   - For the first cell (index 0), the left neighbor is considered empty.
+   - For the last cell (index `gen.length - 1`), the right neighbor is considered empty.
+
+**Example Code Snippet:**
+
+```java
+/**
+ * Computes the next generation for Automaton B.
+ *
+ * @param gen The current generation.
+ * @return The next generation.
+ */
+boolean[] nextGenB(boolean[] gen) {
+    int length = gen.length;
+    boolean[] nextGen = new boolean[length];
+    
+    for (int i = 0; i < length; i++) {
+        boolean left = (i > 0) ? gen[i - 1] : false;
+        boolean center = gen[i];
+        boolean right = (i < length - 1) ? gen[i + 1] : false;
+        
+        if (center) {
+            // Occupied cell rules
+            nextGen[i] = !right;
+        } else {
+            // Empty cell rules
+            int occupiedNeighbors = (left ? 1 : 0) + (right ? 1 : 0);
+            nextGen[i] = (occupiedNeighbors == 1);
+        }
+    }
+    return nextGen;
+}
+```
+
+---
+
+### **Step 10: Write Unit Tests for `nextGenB`**
+
+**Objective:** Write at least eight test cases for the `nextGenB` method, motivating each with a comment.
+
+**Implementation Guide:**
+
+1. **Test Cases to Consider:**
+
+   - **Single Cell Cases:** Occupied and empty.
+   - **Edge Cells:** Verify correct handling of borders.
+   - **Occupied Cells with Empty Right Neighbor:** Should remain occupied.
+   - **Occupied Cells with Occupied Right Neighbor:** Should become empty.
+   - **Empty Cells with One Occupied Neighbor:** Should become occupied.
+   - **Empty Cells with Two Occupied Neighbors:** Should remain empty.
+
+2. **Example Test Cases:**
+
+```java
+@Test
+public void testNextGenB() {
+    // Occupied cell with empty right neighbor remains occupied.
+    boolean[] gen1 = {true, false};
+    boolean[] expected1 = {true, false};
+    assertArrayEquals(expected1, automaton.nextGenB(gen1));
+    
+    // Occupied cell with occupied right neighbor becomes empty.
+    boolean[] gen2 = {true, true};
+    boolean[] expected2 = {false, true};
+    assertArrayEquals(expected2, automaton.nextGenB(gen2));
+    
+    // Empty cell with one occupied neighbor becomes occupied.
+    boolean[] gen3 = {false, true, false};
+    boolean[] expected3 = {true, false, true};
+    assertArrayEquals(expected3, automaton.nextGenB(gen3));
+    
+    // Empty cell with two occupied neighbors remains empty.
+    boolean[] gen4 = {true, false, true};
+    boolean[] expected4 = {false, true, false};
+    assertArrayEquals(expected4, automaton.nextGenB(gen4));
+    
+    // Edge occupied cell with no right neighbor remains occupied.
+    boolean[] gen5 = {true};
+    boolean[] expected5 = {true};
+    assertArrayEquals(expected5, automaton.nextGenB(gen5));
+    
+    // Edge empty cell with one occupied neighbor becomes occupied.
+    boolean[] gen6 = {false, true};
+    boolean[] expected6 = {true, false};
+    assertArrayEquals(expected6, automaton.nextGenB(gen6));
+    
+    // All empty cells remain empty.
+    boolean[] gen7 = {false, false, false};
+    boolean[] expected7 = {false, false, false};
+    assertArrayEquals(expected7, automaton.nextGenB(gen7));
+    
+    // Complex pattern test.
+    boolean[] gen8 = {true, false, true, false};
+    boolean[] expected8 = {true, true, false, true};
+    assertArrayEquals(expected8, automaton.nextGenB(gen8));
+}
+```
+
+---
+
+### **Step 11: Implement `readInitialGeneration` Method**
+
+**Objective:** Read user input to initialize the first generation.
+
+**Implementation Guide:**
+
+1. **Method Signature:**
+
+   ```java
+   boolean[] readInitialGeneration(int length)
+   ```
+
+2. **Logic:**
+
+   - Initialize a boolean array `gen` of size `length` with all `false` values (empty cells).
+   - Read input tokens until you encounter `"init_start"`.
+   - After `"init_start"`, read integers representing occupied cell positions until `"init_end"` is encountered.
+   - For each valid position (greater than 0 and less than or equal to `length`), set `gen[position - 1]` to `true`.
+
+**Example Code Snippet:**
+
+```java
+/**
+ * Reads the initial generation from user input.
+ *
+ * @param length The length of the generation.
+ * @return The initial generation array.
+ */
+boolean[] readInitalGeneration(int length) {
+    boolean[] gen = new boolean[length];
+    // Wait for 'init_start'
+    while (scanner.hasNext()) {
+        String token = scanner.next();
+        if ("init_start".equals(token)) {
+            break;
+        }
+    }
+    // Read positions until 'init_end'
+    while (scanner.hasNext()) {
+        String token = scanner.next();
+        if ("init_end".equals(token)) {
+            break;
+        }
+        try {
+            int position = Integer.parseInt(token);
+            if (position >= 1 && position <= length) {
+                gen[position - 1] = true;
+            }
+        } catch (NumberFormatException e) {
+            // Ignore invalid numbers
+        }
+    }
+    return gen;
+}
+```
+
+---
+
+### **Step 12: Test the Whole Program**
+
+**Testing Guide:**
+
+- **Compare Output:** Run your program with the example inputs provided and ensure the output matches exactly.
+- **Edge Cases:** Try different inputs, including:
+
+  - Different automaton choices (`A` and `B`).
+  - Varying lengths and number of generations.
+  - Initial generations with no occupied cells.
+  - Positions outside the valid range.
+
+- **Ensure Robustness:** The program should handle invalid inputs gracefully (e.g., non-integer values where integers are expected).
+
+---
+
+### **Additional Tips:**
+
+- **Exception Handling:** Make sure to handle exceptions where necessary, especially when parsing integers from user input.
+- **Code Formatting:** Ensure your code is well-formatted and follows standard Java coding conventions.
+- **Comments and Documentation:** Include comments in your code to explain your logic, and make sure your Javadoc comments are complete.
+
+---
+
+### **Final Remarks:**
+
+By following this guide, you should be able to implement the required methods and write the necessary unit tests. Remember, the key to success in programming assignments is understanding the problem, planning your approach, and testing thoroughly.
+
+If you have any specific questions or need further clarification on any part of the implementation, feel free to ask!
