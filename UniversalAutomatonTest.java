@@ -6,10 +6,10 @@ import org.junit.Test;
 /**
  * Test UniversalAutomaton.
  * 
- * @author Your Name
- * @id Your ID
- * @author Your Partner's Name
- * @id Your Partner's ID
+ * @author Milan Versteegh
+ * @ID 2136279
+ * @author Egor Bryantsev
+ * @ID 2087782
  */
 public class UniversalAutomatonTest {
     UniversalAutomaton automaton = new UniversalAutomaton();
